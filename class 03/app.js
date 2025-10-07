@@ -1,13 +1,18 @@
-import express from "express"
+import express, { urlencoded } from "express"
 
 const app = express()
 const PORT = 5000
+
+//Allow body
+app.use(express.json())
+app.use(express.urlencoded({extended : true}))
 
 app.get("/",(request , response)=>{
     response.send("Server Created!")
 })
 
 app.post("/createuser",(request , response)=>{
+    console.log("request", request.body)
     response.send("User Created!")
 })
 
