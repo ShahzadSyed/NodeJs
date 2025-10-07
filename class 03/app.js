@@ -7,11 +7,11 @@ app.get("/",(request , response)=>{
     response.send("Server Created!")
 })
 
-app.get("/createuser",(request , response)=>{
+app.post("/createuser",(request , response)=>{
     response.send("User Created!")
 })
 
-app.get("/updateuser",(request , response)=>{
+app.post("/updateuser",(request , response)=>{
     response.send("User Updated!")
 })
 
@@ -20,7 +20,7 @@ app.get("/getuser",(request , response)=>{
     response.send("User Get!")
 })
 
-app.get("/deleteuser",(request , response)=>{
+app.post("/deleteuser",(request , response)=>{
     response.send("user deleted!")
 })
 
