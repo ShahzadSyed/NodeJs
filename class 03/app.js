@@ -7,12 +7,15 @@ const PORT = 5000
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
+var userArr = []
+
 app.get("/",(request , response)=>{
     response.send("Server Created!")
 })
 
 app.post("/createuser",(request , response)=>{
     console.log("request", request.body)
+    userArr.push(request.body)
     response.send("User Created!")
 })
 
@@ -22,7 +25,8 @@ app.post("/updateuser",(request , response)=>{
 
 
 app.get("/getuser",(request , response)=>{
-    response.send("User Get!")
+    console.log(userArr)
+    response.send(userArr)
 })
 
 app.post("/deleteuser",(request , response)=>{
