@@ -1,22 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import TodoItem from "./TodoItem";
+import TodoInput from "./TodoInput";
 
-function TodoList({ tasks, onToggle, onDelete }) {
+function TodoList() {
+  const [todos, setTodos] = useState([]);
+
+  const fetchTodos = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/todos");
+      setTodos(res.data);
+    } catch (err) {
+      console.error("Error fetching todos:", err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
-    <ul className="todo-list">
-      {tasks.length === 0 ? (
-        <p>No tasks yet. Add one above 👆</p>
+    <div>
+      <TodoInput fetchTodos={fetchTodos} />
+      {todos.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#666" }}>No tasks yet.</p>
       ) : (
-        tasks.map((task) => (
-          <TodoItem
-            key={task.id}
-            task={task}
-            onToggle={onToggle}
-            onDelete={onDelete}
-          />
+        todos.map((todo) => (
+          <TodoItem key={todo._id} todo={todo} fetchTodos={fetchTodos} />
         ))
       )}
-    </ul>
+    </div>
   );
 }
 

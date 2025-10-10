@@ -33,7 +33,7 @@ app.post("/createuser", (req,res)=>{
         const getData = fs.readFileSync("users.txt", "utf-8")
         const parseData = JSON.parse(getData)
         parseData.push(req.body)
-        fs.writeFileSync("users.txt", JSON.stringify(parseData))
+        fs.writeFileSync("users.txt", JSON.stringify(parseData ))
         console.log("parse data" , parseData)
         
     } else{
