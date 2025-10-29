@@ -11,12 +11,13 @@ const PORT = 5000
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+//get API
 app.get("/", (req, res)=>{
     res.send("Server up!")
 })
 
 
-//Create user
+//Create user API
 app.post("/createuser", (req,res)=>{
     // const tempArr =[]
     // tempArr.push(req.body)
@@ -45,14 +46,14 @@ app.post("/createuser", (req,res)=>{
     }
     res.send("File created")
 })
-//get users
+//get users API
 app.get("/getusers", (req,res)=>{
     const users = fs.readFileSync("users.txt", "utf-8")
     res.send(users)
 
 })
 
-//update users with the help of param (/:id)
+//update users with the help of param (/:id) API
 app.post("/updateusers/:id", (req,res)=>{
     const param = req.params
     console.log(param.id, "params")
@@ -74,6 +75,31 @@ app.post("/updateusers/:id", (req,res)=>{
     console.log(newArr, "newArr")
     fs.writeFileSync("users.txt",JSON.stringify(newArr))
     res.send("files updated!")
+})
+
+//delete user by param - API
+app.use("/deleteuser/:userid" , (req , res) =>{
+    // console.log("param" , req.params.userid) //showing user ID
+    const getData = fs.readFileSync("users.txt", "utf-8") //get All user details & Store
+    // console.log("getDate", getData) //Showing ALL user details
+    const parseData = JSON.parse(getData) //get data in JSON format
+    // console.log("parseData", parseData)
+    
+    //get user by id
+    const indexNumber = parseData.findIndex((user)=>{
+        if(user.id === req.params.userid)
+        {
+            // console.log("return", user)
+            return user
+        }
+       
+        
+        // console.log("parseData", parseData)
+        
+    })
+     
+     parseData.splice(indexNumber , 0)
+     console.log("parseData", parseData)
 })
 
 app.listen(PORT , ()=>console.log(`server is running on PORT : ${PORT}`))
