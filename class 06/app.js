@@ -3,6 +3,7 @@ import fs from "fs"
 import { json } from "stream/consumers"
 import { brotliDecompress } from "zlib"
 import { v4 as uuidv4 } from 'uuid';
+import { parse } from "path";
 
 const app = express()
 const PORT = 5000
@@ -78,18 +79,20 @@ app.post("/updateusers/:id", (req,res)=>{
 })
 
 //delete user by param - API
-app.use("/deleteuser/:userid" , (req , res) =>{
+app.post("/deleteuser/:userid" , (req , res) =>{
     // console.log("param" , req.params.userid) //showing user ID
+    
     const getData = fs.readFileSync("users.txt", "utf-8") //get All user details & Store
     // console.log("getDate", getData) //Showing ALL user details
-    const parseData = JSON.parse(getData) //get data in JSON format
-    // console.log("parseData", parseData)
-    
+
+    const parseData = JSON.parse(getData) //Convert data into JSON format
+    // console.log("parseData", parseData) //Showing data in JSON format
+
     //get user by id
     const indexNumber = parseData.findIndex((user)=>{
         if(user.id === req.params.userid)
         {
-            // console.log("return", user)
+            console.log("return", user)
             return user
         }
        
@@ -97,9 +100,13 @@ app.use("/deleteuser/:userid" , (req , res) =>{
         // console.log("parseData", parseData)
         
     })
+     //using splice method remove data
+     parseData.splice(indexNumber , 1)
+     console.log("parseData", parseData) //check data remove or not
      
-     parseData.splice(indexNumber , 0)
-     console.log("parseData", parseData)
+     //update record after deleting data
+     fs.writeFileSync("users.txt", JSON.stringify(parseData))
+     res.send("USER DELETED!")
 })
 
 app.listen(PORT , ()=>console.log(`server is running on PORT : ${PORT}`))
